@@ -70,50 +70,70 @@ double Cell1D::LengthEdge(){
     array<unsigned int, 3> Vertices2D = Vertices;
     array<unsigned int, 3> Edges2D = Edges;
     };
-  //PROBLEMA TOLLERANZA
-  double Cell2D::MaxEdge(){
-      unsigned int indmax = 0;
-      double max = 0.0;
-      array<double, 3> lenedges = {0, 0, 0};
-      bool a = false;
-      bool b = false;
-      bool c = false;
-      for(unsigned int i = 0;i<mesh.numbercell1D;i++)
-         {
-          if(Edges[0]==mesh.id1D[i])
-              {
-              lenedges[0] = mesh.LengthEdges[i];
-              a = true;
-  //          break;
-              }
-          if(Edges[1]==mesh.id1D[i])
-              {
-              lenedges[1] = mesh.LengthEdges[i];
-              b = true;
-  //          break;
-              }
-          if(Edges[2]==mesh.id1D[i])
-              {
-              lenedges[2] = mesh.LengthEdges[i];
-              c = true;
-  //          break;
-              }
-          if(a == true && b == true && c == true)
-          {
-              break;
-          }
-      }
-      for (unsigned int i = 0; i<3; i++)
-      {
-          if(lenedges[i] > max)
-          {
-              max = lenedges[i];
-              indmax = Edges[i]; //NON SO SE HA PIU' SENSO CHE RESTITUISCA L'ID DEL LATO O IL SUO INDICE NEL VETTORE DA TRE
-          }
-      }
-      return indmax;
+ 
+    
+//PROBLEMA TOLLERANZA
+unsigned int Cells::Cell2D::maxedge(){
+    unsigned int indmax = 0;
+    double max = 0.0;
+    array<double, 3> lenedges = {0, 0, 0};
+    for (unsigned int i = 0; i<3; i++)
+    {
+        lenedges[i] = mesh.LengthEdges[Edges[i]];
+        if(lenedges[i] > max)
+        {
+            max = lenedges[i];
+            indmax = Edges[i]; // oppure indmax = i         NON SO SE HA PIU' SENSO CHE RESTITUISCA L'ID DEL LATO O IL SUO INDICE NEL VETTORE DA TRE
+        }
+    }
+    return indmax;
 
-  }
+}
+
+//unsigned int Cell2D::maxedge(){
+//    unsigned int indmax = 0;
+//    double max = 0.0;
+//    array<double, 3> lenedges = {0, 0, 0};
+//    bool a = false;
+//    bool b = false;
+//    bool c = false;
+//    for(unsigned int i = 0;i<mesh.numbercell1D;i++)
+//       {
+//        if(Edges[0]==mesh.id1D[i])
+//            {
+//            lenedges[0] = mesh.LengthEdges[i];
+//            a = true;
+//          break;
+//            }
+//        if(Edges[1]==mesh.id1D[i])
+//            {
+//            lenedges[1] = mesh.LengthEdges[i];
+//            b = true;
+//          break;
+//            }
+//        if(Edges[2]==mesh.id1D[i])
+//            {
+//            lenedges[2] = mesh.LengthEdges[i];
+//            c = true;
+//          break;
+//            }
+//        if(a == true && b == true && c == true)
+//        {
+//            break;
+//        }
+//    }
+//    for (unsigned int i = 0; i<3; i++)
+//    {
+//        if(lenedges[i] > max)
+//        {
+//            max = lenedges[i];
+//            indmax = Edges[i]; //NON SO SE HA PIU' SENSO CHE RESTITUISCA L'ID DEL LATO O IL SUO INDICE NEL VETTORE DA TRE
+//        }
+//    }
+//    return indmax;
+
+//}    
+    
   double Cell2D::Area(){
              //Formula dell'area di Gauss
              A_12 = (x_1*y_2) - (y_1*x_2);

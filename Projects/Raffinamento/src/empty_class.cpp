@@ -36,34 +36,50 @@ Cell1D::Cell1D(unsigned int id,unsigned int marker,Vector2i vertices)
     unsigned int marker1D = marker;
     Vector2i Vertices1d = vertices;
     };
-double Cell1D::LengthEdge(){
-    Vector2d coordOrigin = {0, 0};
-    Vector2d coordEnd= {0, 0};
-    bool a = false;
-    bool b = false;
-    for(unsigned int i = 0;i<mesh.numbercell0D;i++)
-       {
-        if(Vertices1D[0]==mesh.id0D[i])
-            {
-            coordOrigin = mesh.coordinates0D[i];
-            a = true;
+
+    
+//metterei double anziché void
+double Cells::Cell1D::LengthEdge(){
+    Vector2d coordOrigin = mesh.coordinates0D[Vertices1D[0]];
+    Vector2d coordEnd= mesh.coordinates0D[Vertices1D[1]];
+    //LengthEdges = (coordEnd-coordOrigin).norm();
+    double len = sqrt(pow(coordOrigin[0]-coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
+    return len;
+    }
+
+
+
+
+//metterei double anziché void
+//double Cell1D::LengthEdge(){
+//    Vector2d coordOrigin = {0, 0};
+//    Vector2d coordEnd= {0, 0};
+//    bool a = false;
+//    bool b = false;
+//    for(unsigned int i = 0;i<mesh.numbercell0D;i++)
+//       {
+//        if(Vertices1D[0]==mesh.id0D[i])
+//            {
+//            coordOrigin = mesh.coordinates0D[i];
+//            a = true;
 //          break;
-            }
-        if(Vertices1D[1]==mesh.id0D[i])
-            {
-            coordEnd = mesh.coordinates0D[i];
-            b = true;
+//            }
+//        if(Vertices1D[1]==mesh.id0D[i])
+//            {
+//            coordEnd = mesh.coordinates0D[i];
+//            b = true;
 //          break;
-            }
-        if(a == true && b == true)
-        {
-            break;
-        }
-        //LengthEdges = (coordEnd-coordOrigin).norm();
-        double len = sqrt(pow(coordOrigin[0]-coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
-        return len;
-        }
- }
+//            }
+//        if(a == true && b == true)
+//        {
+//            break;
+//        }
+//        //LengthEdges = (coordEnd-coordOrigin).norm();
+//        double len = sqrt(pow(coordOrigin[0]-coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
+//        return len;
+//        }
+//}    
+    
   Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned int, 3> Edges)
     {
     unsigned int Id2D = id;

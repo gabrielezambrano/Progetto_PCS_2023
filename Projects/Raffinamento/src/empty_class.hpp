@@ -41,6 +41,12 @@ public:
     std::vector<vector<unsigned int>> LenghtMax = {};
 
 
+//class Raffinamento{
+//    public:
+//        vector<vector<unsigned int>> MatrAdiac;
+//        bool CreationMatrAdiac();
+//    };    
+    
 };
  class Cell0D {
     private:

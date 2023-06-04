@@ -157,6 +157,20 @@ unsigned int Cells::Cell2D::maxedge(){
              A_31 = (x_3*y_1) - (y_3*x_1);
              Area = abs((A_12+A_23+A_31)/2);
   }
+    
+    
+//vector<vector<unsigned int>> MatrAdiac(mesh.numbercell1D);
+//bool Raffinamento::CreationMatrAdiac() {
+//    for (unsigned int i = 0; i < mesh.numbercell2D; i++) {
+//        for (unsigned int j = 0; j < 3; j++) {
+//            MatrAdiac[mesh.vectt[i].Edges[j]].push_back(mesh.vectt[i].Id2D);
+//        }
+//    }
+//return true;
+//}    
+    
+//-----------------------------------------------------------------
+    
 bool ImportCell0Ds()
 {
   ifstream file;

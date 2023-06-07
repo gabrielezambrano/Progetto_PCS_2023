@@ -368,6 +368,109 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
 
     }
     else {
+       unsigned int idAltroMaxEdgePropa = NULL;
+        unsigned int idAltroTriPropa = NULL;
+        
+        array<unsigned int, 3> latiTriAggiornatoPropa = Triangolo.Edges;
+        array<unsigned int, 3> latiTriNuovoPropa = Triangolo.Edges;
+        array<unsigned int, 3> vertTriAggiornatoPropa = Triangolo.Vertices2D;
+        array<unsigned int, 3> vertTriNuovoPropa = Triangolo.Vertices2D;
+
+        Vector2d midCoordPropa;
+        midCoordPropa[0] = (mesh.vectp[mesh.vects[latoMax].Vertices1D[0]].Coord[0] + mesh.vectp[mesh.vects[latoMax].Vertices1D[1]].Coord[0]) *0.5;
+        midCoordPropa[1] = (mesh.vectp[mesh.vects[latoMax].Vertices1D[0]].Coord[1] + mesh.vectp[mesh.vects[latoMax].Vertices1D[1]].Coord[1]) *0.5;
+        
+        unsigned int markerPPropa;
+        if (mesh.vectp[mesh.vects[latoMax].Vertices1D[0]].marker0D == 0 || mesh.vectp[mesh.vects[latoMax].Vertices1D[1]].marker0D == 0) {
+            markerPPropa = 0;
+        }
+        else {
+        markerPPropa = mesh.vectp[mesh.vects[latoMax].Vertices1D[0]].marker0D; // per come sono i dati di partenza non ci sono/possono
+                                                                          // essere ulteriori configurazioni
+        }
+        
+        unsigned int newIndexpointPropa = mesh.vectp.size();
+        Cells::Cell0D newVertexPropa = Cell0D(newIndexpointPropa, markerPPropa, midCoordPropa);
+        mesh.vectp.push_back(newVertexPropa);
+        
+        unsigned int oppositePropa = NULL;
+        for(unsigned int i = 0; i < 3; i++)
+        {
+            if(!(mesh.vects[latoMax].Vertices1D[0] == Triangolo.Vertices2D[i] || mesh.vects[latoMax].Vertices1D[1] == Triangolo.Vertices2D[i]))
+                {
+                oppositePropa = Triangolo.Vertices2D[i];
+                break;
+                }
+        }
+    
+        Vector2i MedianaVertPropa = {oppositePropa, newVertexPropa};
+    
+        unsigned int idNewEdgePropa = mesh.vects.size();
+    
+        unsigned int markerMedianaPropa = 0; // NON PUO' ESSERE ALTRIMENTI
+        
+        Cell1D MedianaPropa = Cell1D(idNewEdgePropa, markerMedianaPropa, MedianaVertPropa);
+        mesh.vects.push_back(MedianaPropa);
+    
+        Vector2i NewSegVertPropa = {newVertexPropa.Id0D, mesh.vects[latoMax].Vertices1D[1]};
+    
+    
+        Cell1D newSegmentPropa = Cell1D(idNewEdgePropa + 1, mesh.vects[latoMax].marker1D, NewSegVertPropa);
+        mesh.vects.push_back(newSegmentPropa);
+        
+        mesh.vects[latoMax].Vertices1D[1] = newVertexPropa.Id0D;
+        
+        for (unsigned int i = 0;i<3;i++) {
+            if (vertTriNuovoPropa[i] != oppositePropa && vertTriNuovoPropa[i] != mesh.vects[latoMax].Vertices1D[1]) {
+                vertTriNuovoPropa[i] = newVertexPropa.Id0D;
+                break;
+            };
+        }
+    
+        for (unsigned int i = 0;i<3;i++) {
+            if (vertTriAggiornato[i] != opposite && vertTriAggiornato[i] != mesh.vects[longest].Vertices1D[0]) {
+                vertTriAggiornato[i] = newVertex.Id0D;
+                break;
+            };
+        }
+        
+        for (unsigned int i=0; i < 3; i++) {
+            if ((mesh.vects[latiTriAggiornatoPropa[i]].Vertices1D[0] == oppositePropa && mesh.vects[latiTriAggiornatoPropa[i]].Vertices1D[1] == newSegmentPropa.Vertices1D[1]) || (mesh.vects[latiTriAggiornatoPropa[i]].Vertices1D[1] == oppositePropa && mesh.vects[latiTriAggiornatoPropa[i]].Vertices1D[0] == newSegmentPropa.Vertices1D[1])) {
+                latiTriAggiornatoPropa[i] = MedianaPropa.Id1D;
+                break;
+            }
+        }
+    
+        for (unsigned int i=0; i < 3; i++) {
+            if (latiTriNuovoPropa[i] == latoMax) {
+                latiTriNuovoPropa[i] = newSegmentPropa.Id1D;
+            }
+            if ((mesh.vects[latiTriNuovoPropa[i]].Vertices1D[0] == oppositePropa && mesh.vects[latiTriNuovoPropa[i]].Vertices1D[1] == mesh.vects[latoMax].Vertices1D[0]) || (mesh.vects[latiTriNuovoPropa[i]].Vertices1D[1] == oppositePropa && mesh.vects[latiTriNuovoPropa[i]].Vertices1D[0] == mesh.vects[latoMax].Vertices1D[0])) {
+                latiTriNuovoPropa[i] = MedianaPropa.Id1D;
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        array<unsigned int, 3> latiTriResiduoPropa = Triangolo.Edges;
+        array<unsigned int, 3> vertTriResiduoPropa = Triangolo.Vertices2D;
+                
+        // punto medio vecchio da salvare come origin nella mediana
+        // aggiornato = lato tagliato
+        // nuovo = altro da prppagazione
+        // residuo = residuo da bisezione precedente collegando punti medi
         // taglio lato lungo e poi collego
         // in questo caso è ricorsiva
     }

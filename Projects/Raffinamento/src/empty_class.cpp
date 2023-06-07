@@ -17,7 +17,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
 
 Cells::MatrAdiac MatriceAdiacenza;
 
-namespace Cells
+namespace Cells 
 {
 
 

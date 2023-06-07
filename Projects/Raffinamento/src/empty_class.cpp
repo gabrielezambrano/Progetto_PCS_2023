@@ -5,26 +5,28 @@
 
 using namespace std;
 
-vector<Cells::Cell0D> vectp = {};
-vector<Cells::Cell1D> vects = {};
-vector<Cells::Cell2D> vectt = {};
+
+
+
 Cells::TriangularMesh mesh;
 
 bool ImportCell0Ds();
 bool ImportCell1Ds();
 bool ImportCell2Ds();
+void Propagazione(unsigned int idLatoTagliato, unsigned int Triangolo, unsigned int latoMax);
+
+Cells::MatrAdiac MatriceAdiacenza;
 
 namespace Cells
 {
 
 
+// COSTRUTTORI
 
-//Cell0D::Cell0D(const unsigned int& id,
-//               const Vector2d& coordinates0D)
 Cell0D::Cell0D(unsigned int id, unsigned int marker, Vector2d coord)
     {
-    unsigned int marker0D = marker;
     unsigned int Id0D = id;
+    unsigned int marker0D = marker;
     Vector2d Coord = coord;
     };
 
@@ -37,7 +39,18 @@ Cell1D::Cell1D(unsigned int id,unsigned int marker,Vector2i vertices)
     Vector2i Vertices1d = vertices;
     };
 
-    
+Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned int, 3> Edges)
+    {
+    unsigned int Id2D = id;
+    array<unsigned int, 3> Vertices2D = Vertices;
+    array<unsigned int, 3> Edges2D = Edges;
+    };
+
+
+//METODI LENEDGE, MAXEDGE, (AREA vince)
+
+// !! se nella parte iterativa il lato non viene tolto ma aggiornato con nuova end, non c'è riscalamento id nei vettori -> non serve ciclo for !!
+
 //metterei double anziché void
 double Cells::Cell1D::LengthEdge(){
     Vector2d coordOrigin = mesh.coordinates0D[Vertices1D[0]];
@@ -48,46 +61,6 @@ double Cells::Cell1D::LengthEdge(){
     }
 
 
-
-
-//metterei double anziché void
-//double Cell1D::LengthEdge(){
-//    Vector2d coordOrigin = {0, 0};
-//    Vector2d coordEnd= {0, 0};
-//    bool a = false;
-//    bool b = false;
-//    for(unsigned int i = 0;i<mesh.numbercell0D;i++)
-//       {
-//        if(Vertices1D[0]==mesh.id0D[i])
-//            {
-//            coordOrigin = mesh.coordinates0D[i];
-//            a = true;
-//          break;
-//            }
-//        if(Vertices1D[1]==mesh.id0D[i])
-//            {
-//            coordEnd = mesh.coordinates0D[i];
-//            b = true;
-//          break;
-//            }
-//        if(a == true && b == true)
-//        {
-//            break;
-//        }
-//        //LengthEdges = (coordEnd-coordOrigin).norm();
-//        double len = sqrt(pow(coordOrigin[0]-coordEnd[0], 2)+pow(coordOrigin[1] - coordEnd[1], 2));
-//        return len;
-//        }
-//}    
-    
-  Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned int, 3> Edges)
-    {
-    unsigned int Id2D = id;
-    array<unsigned int, 3> Vertices2D = Vertices;
-    array<unsigned int, 3> Edges2D = Edges;
-    };
- 
-    
 //PROBLEMA TOLLERANZA
 unsigned int Cells::Cell2D::maxedge(){
     unsigned int indmax = 0;
@@ -106,114 +79,278 @@ unsigned int Cells::Cell2D::maxedge(){
 
 }
 
-//unsigned int Cell2D::maxedge(){
-//    unsigned int indmax = 0;
-//    double max = 0.0;
-//    array<double, 3> lenedges = {0, 0, 0};
-//    bool a = false;
-//    bool b = false;
-//    bool c = false;
-//    for(unsigned int i = 0;i<mesh.numbercell1D;i++)
-//       {
-//        if(Edges[0]==mesh.id1D[i])
-//            {
-//            lenedges[0] = mesh.LengthEdges[i];
-//            a = true;
-//          break;
-//            }
-//        if(Edges[1]==mesh.id1D[i])
-//            {
-//            lenedges[1] = mesh.LengthEdges[i];
-//            b = true;
-//          break;
-//            }
-//        if(Edges[2]==mesh.id1D[i])
-//            {
-//            lenedges[2] = mesh.LengthEdges[i];
-//            c = true;
-//          break;
-//            }
-//        if(a == true && b == true && c == true)
-//        {
-//            break;
-//        }
-//    }
-//    for (unsigned int i = 0; i<3; i++)
-//    {
-//        if(lenedges[i] > max)
-//        {
-//            max = lenedges[i];
-//            indmax = Edges[i]; //NON SO SE HA PIU' SENSO CHE RESTITUISCA L'ID DEL LATO O IL SUO INDICE NEL VETTORE DA TRE
-//        }
-//    }
-//    return indmax;
 
-//}    
-    
-  double Cell2D::Area(){
-             //Formula dell'area di Gauss
-             A_12 = (x_1*y_2) - (y_1*x_2);
-             A_23 = (x_2*y_3) - (y_2*x_3);
-             A_31 = (x_3*y_1) - (y_3*x_1);
-             Area = abs((A_12+A_23+A_31)/2);
-  }
-    
-    
-//vector<vector<unsigned int>> MatrAdiac(mesh.numbercell1D);
-//bool Raffinamento::CreationMatrAdiac() {
-//    for (unsigned int i = 0; i < mesh.numbercell2D; i++) {
-//        for (unsigned int j = 0; j < 3; j++) {
-//            MatrAdiac[mesh.vectt[i].Edges[j]].push_back(mesh.vectt[i].Id2D);
-//        }
-//    }
-//return true;
-//}    
-    
-//-----------------------------------------------------------------
-    
+
+//----------------------------------------------------------------------
+
+// RAFFINAMENTO:
+
+// MATRICE DI ADIACENZA [OK]
+// ORDINAMENTO PER AREA [Riccardo]
+// PUNTO MEDIO LATO LUNGO (CHE SI AGGIORNA CON STESSA ORIGIN E NUOVA END, LEN = LEN/2) (NEW LATO, LEN = LEN/2)
+// TAGLIO LATO LUNGO
+
+
+MatrAdiac::MatrAdiac() {
+    vector<vector<unsigned int>> MatrAdiac(mesh.numbercell1D);
+    for (unsigned int i = 0; i < mesh.numbercell2D; i++) {
+        for (unsigned int j = 0; j < 3; j++) {
+            MatrAdiac[mesh.vectt[i].Edges[j]].push_back(mesh.vectt[i].Id2D);
+        }
+    }
+    Matr = MatrAdiac;
+}
+
+
+
+
+//void MakeHeap(vector<Cells::Cell2D> vectt, int n, int i){
+//
+//  int max = i;
+//  int l = 2 * i + 1;
+//  int r = 2 * i + 2;
+//
+//  if (l < n && vectt[l].Area() < vectt[max].Area())
+//  {
+//    max = l;
+//  }
+//
+//  if (r < n && vectt[r].Area() < vectt[max].Area())
+//  {
+//    max = r;
+//  }
+//
+//  if (max != i)
+//  {
+//    swap(vectt[i], vectt[l]);
+//
+//    MakeHeap(vectt, n, i);
+//  }
+//}
+//
+//void HeapSort(vector<Cells::Cell2D>  vectt, int n){
+//
+//  for (int i = n / 2 - 1; i >= 0; i--)
+//    MakeHeap(vectt, n, i);
+//
+//  for (int i = n - 1; i >= 0; i--)
+//  {
+//    swap(vectt[0], vectt[i]);
+//    MakeHeap(vectt, i, 0);
+//  }
+//}
+
+
+
+void Bisect(Cells::Cell2D triangleToBisect){
+
+    unsigned int longest = triangleToBisect.maxedge();
+
+    //serve subito controllo: 1) marker lato lungo 2) lato lungo dell'eventuale altro triangolo
+    unsigned int markerMaxEdge = mesh.vects[longest].marker1D;
+    unsigned int idAltroMaxEdge = NULL;
+    unsigned int idAltroTri = NULL;
+    if (markerMaxEdge == 0) {
+        for (unsigned int i = 0; i<2; i++) {
+            if (MatriceAdiacenza.Matr[longest][i] != triangleToBisect.Id2D) {
+                idAltroMaxEdge = mesh.vectt[MatriceAdiacenza.Matr[longest][i]].maxedge();
+            } 
+        }
+    }
+
+
+    // inizio bisezione
+    array<unsigned int, 3> latiTriAggiornato = triangleToBisect.Edges;
+    array<unsigned int, 3> latiTriNuovo = triangleToBisect.Edges;
+    array<unsigned int, 3> vertTriAggiornato = triangleToBisect.Vertices2D;
+    array<unsigned int, 3> vertTriNuovo = triangleToBisect.Vertices2D;
+    Vector2d midCoord;
+    midCoord[0] = (mesh.vectp[mesh.vects[longest].Vertices1D[0]].Coord[0] + mesh.vectp[mesh.vects[longest].Vertices1D[1]].Coord[0]) *0.5;
+    midCoord[1] = (mesh.vectp[mesh.vects[longest].Vertices1D[0]].Coord[1] + mesh.vectp[mesh.vects[longest].Vertices1D[1]].Coord[1]) *0.5;
+
+    unsigned int markerP;
+    if (mesh.vectp[mesh.vects[longest].Vertices1D[0]].marker0D == 0 || mesh.vectp[mesh.vects[longest].Vertices1D[1]].marker0D == 0) {
+        markerP = 0;
+    }
+    else {
+    markerP = mesh.vectp[mesh.vects[longest].Vertices1D[0]].marker0D; // per come sono i dati di partenza non ci sono/possono
+                                                                      // essere ulteriori configurazioni
+    }
+    unsigned int newIndexpoint = mesh.vectp.size();
+    Cells::Cell0D newVertex = Cell0D(newIndexpoint, markerP, midCoord);
+    mesh.vectp.push_back(newVertex);
+
+    unsigned int opposite = NULL;
+    for(unsigned int i = 0; i < 3; i++)
+    {
+        if(!(mesh.vects[longest].Vertices1D[0] == triangleToBisect.Vertices2D[i] || mesh.vects[longest].Vertices1D[1] == triangleToBisect.Vertices2D[i]))
+            {
+            opposite = triangleToBisect.Vertices2D[i];
+            break;
+            }
+    }
+
+    Vector2i MedianaVert = {opposite, newVertex};
+
+    unsigned int idNewEdge = mesh.vects.size();
+
+    unsigned int markerMediana = 0; // NON PUO' ESSERE ALTRIMENTI
+
+
+
+    //Creo segm mediana
+    Cell1D Mediana = Cell1D(idNewEdge, markerMediana, MedianaVert);
+    mesh.vects.push_back(Mediana);
+
+    Vector2i NewSegVert = {newVertex.Id0D, mesh.vects[longest].Vertices1D[1]};
+
+
+
+    //Creo segm pto medio -> end vecchia
+    Cell1D newSegment = Cell1D(idNewEdge + 1, mesh.vects[longest].marker1D, NewSegVert);
+    mesh.vects.push_back(newSegment);
+
+
+    //aggiorno segm origin vecchia -> pto medio
+    mesh.vects[longest].Vertices1D[1] = newVertex.Id0D;  // GUARDATO FINO A QUA
+
+
+
+    //vertici effettivi del triangolo nuovo
+    for (unsigned int i = 0;i<3;i++) {
+        if (vertTriAggiornato[i] != opposite && vertTriAggiornato[i] != mesh.vects[longest].Vertices1D[1]) {
+            vertTriAggiornato[i] = newVertex.Id0D;
+            break;
+        };
+    }
+
+    // vertici effettivi del triangolo aggiornato
+    for (unsigned int i = 0;i<3;i++) {
+        if (vertTriAggiornato[i] != opposite && vertTriAggiornato[i] != mesh.vects[longest].Vertices1D[0]) {
+            vertTriAggiornato[i] = newVertex.Id0D;
+            break;
+        };
+    }
+
+
+    // lati effettivi del triangolo aggiornato
+    for (unsigned int i=0; i < 3; i++) {
+        if ((mesh.vects[latiTriAggiornato[i]].Vertices1D[0] == opposite && mesh.vects[latiTriAggiornato[i]].Vertices1D[1] == newSegment.Vertices1D[1]) || (mesh.vects[latiTriAggiornato[i]].Vertices1D[1] == opposite && mesh.vects[latiTriAggiornato[i]].Vertices1D[0] == newSegment.Vertices1D[1])) {
+            latiTriAggiornato[i] = Mediana.Id1D;
+            break;
+        }
+    }
+
+    // lati effettivi del triangolo nuovo
+
+
+    for (unsigned int i=0; i < 3; i++) {
+        if (latiTriNuovo[i] == longest) {
+            latiTriNuovo[i] = newSegment.Id1D;
+        }
+        if ((mesh.vects[latiTriNuovo[i]].Vertices1D[0] == opposite && mesh.vects[latiTriNuovo[i]].Vertices1D[1] == mesh.vects[longest].Vertices1D[0]) || (mesh.vects[latiTriNuovo[i]].Vertices1D[1] == opposite && mesh.vects[latiTriNuovo[i]].Vertices1D[0] == mesh.vects[longest].Vertices1D[0])) {
+            latiTriNuovo[i] = Mediana.Id1D;
+        }
+    }
+
+    // creazione triangolo nuovo
+    unsigned int idnewTri = mesh.vectt.size();
+    Cell2D newTri = Cell2D(idnewTri, vertTriNuovo, latiTriNuovo);
+    mesh.vectt.push_back(newTri);
+
+    // aggiornamento triangolo vecchio
+    triangleToBisect.Edges = latiTriAggiornato;
+    triangleToBisect.Vertices2D = vertTriAggiornato;
+
+    // aggiorno matrice di adiacenza
+    // aggiungo mediana
+    MatriceAdiacenza.Matr.push_back({newTri.Id2D, triangleToBisect.Id2D});
+    // aggiungo newSegment
+    MatriceAdiacenza.Matr.push_back({newTri.Id2D, idAltroTri});
+    // aggiorno terzo lato
+    for (unsigned int i=0; i<3; i++) {
+        if(newTri.Edges[i] != Mediana.Id1D && newTri.Edges[i] != newSegment.Id1D){
+            for (unsigned int j = 0; j < 2; j++) {
+                if(MatriceAdiacenza.Matr[newTri.Edges[i]][j] == triangleToBisect.Id2D){
+                    MatriceAdiacenza.Matr[newTri.Edges[i]][j] = newTri.Id2D;
+                    break;
+                }
+            }
+            break;
+        }
+
+    }
+
+    if (markerMaxEdge == 0) {
+        Propagazione(longest, idAltroTri, idAltroMaxEdge);
+    }
+
+
+} // fine Bisect
+
+
+
+void Propagazione(unsigned int idLatoTagliato, unsigned int Triangolo, unsigned int latoMax){
+    if (idLatoTagliato == latoMax){
+        // collega pto medio e vertice opposto
+    }
+    else {
+        // taglio lato lungo e poi collego
+        // in questo caso è ricorsiva
+    }
+}
+
+
+} // fine namespace Cells
+
+
+//-----------------------------------------------------------------------
+
+//IMPORTAZIONE
+
 bool ImportCell0Ds()
 {
-  ifstream file;
-  file.open("./Cell0Ds.csv");
 
-  if(file.fail())
-    return false;
+ifstream file;
+file.open("./Cell0Ds.csv");
 
-  list<string> listLines;
-  string line;
-  while (getline(file, line))
-    listLines.push_back(line);
+if(file.fail())
+return false;
 
-  file.close();
+list<string> listLines;
+string line;
+while (getline(file, line))
+listLines.push_back(line);
 
-  listLines.pop_front();
+file.close();
 
-  unsigned int NumberCell0D = listLines.size();
-  unsigned int numberCell0D = NumberCell0D;
+listLines.pop_front();
 
-  if (NumberCell0D == 0)
-  {
-    cerr << "There is no cell 0D" << endl;
-    return false;
-  }
+mesh.numbercell0D = listLines.size();
 
-  mesh.id0D.reserve(numberCell0D);
-  mesh.coordinates0D.reserve(numberCell0D);
+if (mesh.numbercell0D == 0)
+{
+cerr << "There is no cell 0D" << endl;
+return false;
+}
 
-  for (const string& line : listLines)
-  {
-    istringstream converter(line);
+mesh.id0D.reserve(mesh.numbercell0D);
+mesh.coordinates0D.reserve(mesh.numbercell0D);
 
-    unsigned int id;
-    unsigned int marker;
-    Vector2d coord;
+for (const string& line : listLines)
+{
+istringstream converter(line);
 
-    converter >>  id >> marker >> coord(0) >> coord(1);
+unsigned int id;
+unsigned int marker;
+Vector2d coord;
 
-    mesh.id0D.push_back(id);
-    mesh.coordinates0D.push_back(coord);
-    Cells::Cell0D point = Cells::Cell0D(id,marker,coord);
-    vectp.push_back(point);
+converter >>  id >> marker >> coord(0) >> coord(1);
+
+mesh.id0D.push_back(id);
+mesh.coordinates0D.push_back(coord);
+Cells::Cell0D point = Cells::Cell0D(id,marker,coord);
+mesh.vectp.push_back(point);
 
 //    if( marker != 0)
 //    {
@@ -244,17 +381,16 @@ bool ImportCell1Ds()
 
   listLines.pop_front();
 
-  unsigned int NumberCell1D  = listLines.size();
-  unsigned int numberCell1D = NumberCell1D;
+  mesh.numbercell1D = listLines.size();
 
-  if (NumberCell1D == 0)
+  if (mesh.numbercell1D == 0)
   {
     cerr << "There is no cell 1D" << endl;
     return false;
   }
 
-  mesh.id1D.reserve(numberCell1D);
-  mesh.vertices1D.reserve(numberCell1D);
+  mesh.id1D.reserve(mesh.numbercell1D);
+  mesh.vertices1D.reserve(mesh.numbercell1D);
 
   for (const string& line : listLines)
   {
@@ -266,7 +402,8 @@ bool ImportCell1Ds()
 
     converter >>  id >> marker >> vertices(0) >> vertices(1);
     Cells::Cell1D segment = Cells::Cell1D(id,marker,vertices);
-    vects.push_back(segment);
+    mesh.vects.push_back(segment);
+    mesh.LengthEdges.push_back(segment.LengthEdge());
     mesh.id1D.push_back(id);
     mesh.vertices1D.push_back(vertices);
 
@@ -302,18 +439,18 @@ bool ImportCell2Ds()
 
   listLines.pop_front();
 
-  unsigned int NumberCell2D = listLines.size();
-  unsigned int numberCell2D = NumberCell2D;
 
-  if (NumberCell2D == 0)
+  mesh.numbercell2D = listLines.size();
+
+  if (mesh.numbercell2D == 0)
   {
     cerr << "There is no cell 2D" << endl;
     return false;
   }
 
-  mesh.id2D.reserve(NumberCell2D);
-  mesh.vertices2D.reserve(NumberCell2D);
-  mesh.edges2D.reserve(NumberCell2D);
+  mesh.id2D.reserve(mesh.numbercell2D);
+  mesh.vertices2D.reserve(mesh.numbercell2D);
+  mesh.edges2D.reserve(mesh.numbercell2D);
 
   for (const string& line : listLines)
   {
@@ -330,7 +467,7 @@ bool ImportCell2Ds()
       converter >> edges[i];
 
     Cells::Cell2D triangle = Cells::Cell2D(id,vertices,edges);
-    vectt.push_back(triangle);
+    mesh.vectt.push_back(triangle);
     mesh.id2D.push_back(id);
     mesh.vertices2D.push_back(vertices);
     mesh.edges2D.push_back(edges);
@@ -338,4 +475,3 @@ bool ImportCell2Ds()
   file.close();
   return true;
 }
-

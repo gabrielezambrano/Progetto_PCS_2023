@@ -474,7 +474,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
         // taglio lato lungo e poi collego
         // in questo caso è ricorsiva
     }
-}
+} // fine Propagazione
 
 
 } // fine namespace Cells

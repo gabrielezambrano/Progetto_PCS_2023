@@ -58,23 +58,16 @@ namespace Cells {
     class TriangularMesh{
     public:
         unsigned int numbercell0D;
-        vector<unsigned int> id0D;
-        vector<Vector2d> coordinates0D;
         vector<Cells::Cell0D> vectp = {};
 
 
 
         unsigned int numbercell1D;
-        vector<unsigned int> id1D;
-        vector<Vector2i> vertices1D;
         vector<Cells::Cell1D> vects = {};
         vector<double> LengthEdges = {};
 
 
         unsigned int numbercell2D;
-        vector<unsigned int> id2D;
-        vector<array<unsigned int, 3>> edges2D;
-        vector<array<unsigned int, 3>> vertices2D;
         std::vector<vector<unsigned int>> LenghtMax = {};
         vector<Cells::Cell2D> vectt = {};
 

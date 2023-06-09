@@ -136,8 +136,8 @@ MatrAdiac::MatrAdiac() {
 //
 //  for (int i = n - 1; i >= 0; i--)
 //  {
-//    swap(vectt[0], vectt[i]);
-//    MakeHeap(vectt, i, 0);
+//    swap(vectt[0], vectt[i]); // scambio il primo elemento (il più grande) con l'ultimo per escluderlo dal ciclo successivo
+//    MakeHeap(vectt, i, 0); // ripeto il ciclo con l'elemento maggiore escluso
 //  }
 //}
 

@@ -131,7 +131,7 @@ MatrAdiac::MatrAdiac() {
 //
 //void HeapSort(vector<Cells::Cell2D>  vectt, int n){
 //
-//  for (int i = n / 2 - 1; i >= 0; i--)
+//  for (int i = n / 2 - 1; i >= 0; i--) // crea primo heap da vettore
 //    MakeHeap(vectt, n, i);
 //
 //  for (int i = n - 1; i >= 0; i--)

@@ -268,7 +268,7 @@ bool ImportCell2Ds()
 // RAFFINAMENTO:
 
 // MATRICE DI ADIACENZA [OK]
-// ORDINAMENTO PER AREA [Riccardo]
+// ORDINAMENTO PER AREA 
 // PUNTO MEDIO LATO LUNGO (CHE SI AGGIORNA CON STESSA ORIGIN E NUOVA END, LEN = LEN/2) (NEW LATO, LEN = LEN/2)
 // TAGLIO LATO LUNGO
 
@@ -522,7 +522,7 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
 
 
     } //fine if (stesso lato max)
-    else { //Riccardo [Umberto checked]
+    else { 
 
 
         // va fatto un if che mette l'end di latoMax = end latotagliatonuovo (caso 1)

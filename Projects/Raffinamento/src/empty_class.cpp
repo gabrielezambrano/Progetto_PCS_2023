@@ -793,7 +793,44 @@ void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliat
         }
     } // fine else (lato lungo diverso dal precedente)
 } // fine Propagazione
+bool TriangularMesh::ExportCell0Ds(TriangularMesh& mesh, string file){
 
+        std::ofstream outputFile("\\Raffinamento\\Dataset\\" + file + "\\ExportCell0Ds.csv");
+        if (!outputFile.is_open()) {
+            cerr << "Failed to open the file." << endl;
+            return false;
+        }
+        outputFile << "id marker coord" << "\n"; 
+
+        for(unsigned int i=0; i<mesh.NumberCell0D; i++)
+        {
+            outputFile << mesh.Cell0DId[i] << " " << mesh.Cell0DMarkers.find(marker) << " " ;
+            outputFile << mesh.Cell0DCoordinates[mesh.Cell0DId[i]][0] << " " << mesh.Cell0DCoordinates[mesh.Cell0DId[i]][1] << "\n";
+        }
+
+        outputFile.close();
+
+        return true;
+    }
+ bool TriangularMesh::ExportCell1Ds(TriangularMesh& mesh, string file){
+
+        std::ofstream outputFile("\\Raffinamento\\Dataset\\" + file + "\\ExportCell1Ds.csv");
+        if (!outputFile.is_open()) {
+            cerr << "Failed to open the file." << endl;
+            return false;
+        }
+        outputFile << "Id Marker Vertices" << "\n"; 
+
+        for(unsigned int i=0; i<mesh.NumberCell1D; i++)
+        {
+            outputFile << mesh.Cell1DId[i] << " " << mesh.Cell1DMarkers.find(marker) << " ";
+            outputFile << mesh.Cell1DVertices[mesh.Cell1DId[i]][0] << " " << mesh.Cell1DVertices[mesh.Cell1DId[i]][1] << "\n";
+        }
+
+        outputFile.close();
+
+        return true;
+    }
 //}
 
 

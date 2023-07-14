@@ -804,7 +804,7 @@ bool TriangularMesh::ExportCell0Ds(TriangularMesh& mesh){
         }
         file << "id marker coord" <<endl; 
 
-        for(unsigned int i=0; i<mesh.NumberCell0D; i++)
+        for(unsigned int i=0; i<mesh.numbercell0D; i++)
         {
             outputFile << mesh.Cell0DId[i] << " " << mesh.Cell0DMarkers.find(marker) << " " ;
             outputFile << mesh.Cell0DCoordinates[mesh.Cell0DId[i]][0] << " " << mesh.Cell0DCoordinates[mesh.Cell0DId[i]][1] << "\n";
@@ -824,7 +824,7 @@ bool TriangularMesh::ExportCell0Ds(TriangularMesh& mesh){
         }
         file << "Id Marker Vertices" <<endl; 
 
-        for(unsigned int i=0; i<mesh.NumberCell1D; i++)
+        for(unsigned int i=0; i<mesh.numbercell1D; i++)
         {
             outputFile << mesh.Cell1DId[i] << " " << mesh.Cell1DMarkers.find(marker) << " ";
             outputFile << mesh.Cell1DVertices[mesh.Cell1DId[i]][0] << " " << mesh.Cell1DVertices[mesh.Cell1DId[i]][1] << "\n";
@@ -844,7 +844,7 @@ bool TriangularMesh::ExportCell1Ds(TriangularMesh& mesh){
         }
         file << "Id Vertices Edges" <<endl; 
 
-        for(unsigned int i=0; i<mesh.NumberCell2D; i++)
+        for(unsigned int i=0; i<mesh.numbercell2D; i++)
         {
             outputFile << mesh.Cell2DId[i] << " ";
 

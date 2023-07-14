@@ -802,7 +802,7 @@ bool TriangularMesh::ExportCell0Ds(TriangularMesh& mesh){
             cerr << "Failed to open the file." << endl;
             return false;
         }
-        file << "id marker coord" << "\n"; 
+        file << "id marker coord" <<endl; 
 
         for(unsigned int i=0; i<mesh.NumberCell0D; i++)
         {
@@ -822,7 +822,7 @@ bool TriangularMesh::ExportCell0Ds(TriangularMesh& mesh){
             cerr << "Failed to open the file." << endl;
             return false;
         }
-        file << "Id Marker Vertices" << "\n"; 
+        file << "Id Marker Vertices" <<endl; 
 
         for(unsigned int i=0; i<mesh.NumberCell1D; i++)
         {
@@ -834,6 +834,28 @@ bool TriangularMesh::ExportCell0Ds(TriangularMesh& mesh){
 
         return true;
     }
+bool TriangularMesh::ExportCell1Ds(TriangularMesh& mesh){
+    ofstream file;
+    string outputFile= "ExportCell2Ds.csv";
+    file.open(outputFile);
+        if (!outputFile.is_open()) {
+            cerr << "Failed to open the file." << endl;
+            return false;
+        }
+        file << "Id Vertices Edges" <<endl; 
+
+        for(unsigned int i=0; i<mesh.NumberCell2D; i++)
+        {
+            outputFile << mesh.Cell2DId[i] << " ";
+
+            outputFile << mesh.Cell2DVertices2D[mesh.Cell2DId[i]][0] << " " << mesh.Cell2DVertices2D[mesh.Cell2DId[i]][1] << " " << mesh.Cell2DVertices2D[mesh.Cell2DId[i]][2] << " ";
+            outputFile << mesh.Cell2DEdges[mesh.Cell2DId[i]][0] << " " << mesh.Cell2DEdges[mesh.Cell2DId[i]][1] << " " << mesh.Cell2DEdges2D[mesh.Cell2DId[i]][2] <<endl;
+        }
+
+        file.close();
+
+        return true;
+}
 //}
 
 

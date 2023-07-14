@@ -61,8 +61,8 @@ namespace Project {
         return x > y ? x : y;
         }
 
-    static constexpr double tol1D = 1.0e-12;
-    static constexpr double tol2D = max_tol(tol1D * tol1D, numeric_limits<double>::epsilon());
+    static constexpr double tol1D = 1.0e-12; //tolleranza lunghezze
+    static constexpr double tol2D = max_tol(tol1D * tol1D, numeric_limits<double>::epsilon()); //tolleranza aree
 
 
     inline bool operator<(Project::Cell2D& t1,  Project::Cell2D& t2)

@@ -834,7 +834,7 @@ bool TriangularMesh::ExportCell0Ds(TriangularMesh& mesh){
 
         return true;
     }
-bool TriangularMesh::ExportCell1Ds(TriangularMesh& mesh){
+bool TriangularMesh::ExportCell2Ds(TriangularMesh& mesh){
     ofstream file;
     string outputFile= "ExportCell2Ds.csv";
     file.open(outputFile);

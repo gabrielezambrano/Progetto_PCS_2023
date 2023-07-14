@@ -47,32 +47,6 @@ namespace Project {
             unsigned int maxedge();
             double Area();
         };
-
-  class TriangularMesh{
-    public:
-        unsigned int numbercell0D;
-        vector<Project::Cell0D> vectp = {};
-
-
-
-        unsigned int numbercell1D;
-        vector<Project::Cell1D> vects = {};
-        vector<double> LengthEdges = {};
-
-
-        unsigned int numbercell2D;
-        std::vector<vector<unsigned int>> LenghtMax = {};
-        vector<Project::Cell2D> vectt = {};
-
-        TriangularMesh() = default;
-    };
-
-    class MatrAdiac{
-    public:
-        vector<vector<unsigned int>> Matr;
-        MatrAdiac(vector<Project::Cell2D> vectt, vector<Project::Cell1D> vects);
-    };
-
  }
    
     bool ImportCell0Ds();

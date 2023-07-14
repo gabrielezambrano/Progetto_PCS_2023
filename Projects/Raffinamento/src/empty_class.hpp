@@ -48,10 +48,6 @@ namespace Project {
             double Area();
         };
  }
-   
-    bool ImportCell0Ds();
-    bool ImportCell1Ds();
-    bool ImportCell2Ds();
     bool ExportCell0Ds();
     bool ExportCell1Ds();
 

@@ -306,7 +306,7 @@ void Bisect(Project::Cell2D triangleToBisect, vector<Project::Cell0D> vectp, vec
     }
 
 
-    // salvo vertici e lati che poi dovrò aggiornare [Umberto]
+    // salvo vertici e lati che poi dovrò aggiornare
     array<unsigned int, 3> latiTriNuovo = triangleToBisect.Edges;
     array<unsigned int, 3> vertTriNuovo = triangleToBisect.Vertices2D;
     // inizio bisezione

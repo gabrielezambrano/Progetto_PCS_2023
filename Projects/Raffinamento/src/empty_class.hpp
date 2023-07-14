@@ -48,9 +48,9 @@ namespace Project {
             double Area();
         };
  }
-    bool ExportCell0Ds();
-    bool ExportCell1Ds();
-    bool ExportCell2Ds();
+    bool ExportCell0Ds(TriangularMesh& mesh);
+    bool ExportCell1Ds(TriangularMesh& mesh);
+    bool ExportCell2Ds(TriangularMesh& mesh);
 
   void Bisect(Project::Cell2D triangleToBisect, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr);
   void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Project::Cell2D Triangolo, unsigned int latoMax, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr);

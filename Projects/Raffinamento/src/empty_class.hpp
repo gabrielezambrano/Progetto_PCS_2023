@@ -48,14 +48,7 @@ namespace Project {
             double Area();
         };
 
-
-
-
-
-
-
-
-    class TriangularMesh{
+  class TriangularMesh{
     public:
         unsigned int numbercell0D;
         vector<Project::Cell0D> vectp = {};

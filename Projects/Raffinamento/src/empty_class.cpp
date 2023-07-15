@@ -436,7 +436,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
 void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr){
 
-    if (idLatoTagliatoVecchio == latoMax){ //Parte Umberto
+    if (idLatoTagliatoVecchio == latoMax){
 
         // collega pto medio e vertice opposto
 

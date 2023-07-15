@@ -287,7 +287,7 @@ MatrAdiac::MatrAdiac(vector<Project::Cell2D> vectt, vector<Project::Cell1D> vect
 
 
 
-void Bisect(Project::Cell2D triangleToBisect, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr){
+void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr){
 
 
     unsigned int longest = triangleToBisect.maxedge();
@@ -434,7 +434,7 @@ void Bisect(Project::Cell2D triangleToBisect, vector<Project::Cell0D> vectp, vec
 
 
 
-void Propagazione(unsigned int idLatoTagliatoVecchio, unsigned int idLatoTagliatoNuovo, Cell2D Triangolo, unsigned int latoMax, vector<Project::Cell0D> vectp, vector<Project::Cell1D> vects, vector<Project::Cell2D> vectt, vector<vector<unsigned int>> Matr){
+void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr){
 
     if (idLatoTagliatoVecchio == latoMax){ //Parte Umberto
 

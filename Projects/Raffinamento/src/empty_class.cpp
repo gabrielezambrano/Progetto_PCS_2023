@@ -605,7 +605,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         Cell1D newSegmentPropa = Cell1D(idNewEdgeTemp, vects[latoMax].marker1D, NewSegVertPropa);
         vects.push_back(newSegmentPropa);
 
-        // aggiorno end pto medio propa
+        // aggiorno end mediana propa
         vects[latoMax].Vertices1D[1] = newVertexPropa.Id0D; //GUARDATO FINO A QUI
 
 

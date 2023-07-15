@@ -535,7 +535,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 vects[latoMax].Vertices1D[i-1] = supporto;
 
             }
-            else if (vects[latoMax].Vertices1D[i] == vects[idLatoTagliatoVecchio].Vertices1D[1] && 1==0) {
+            else if (vects[latoMax].Vertices1D[i] == vects[idLatoTagliatoNuovo].Vertices1D[1] && 1==0) {
                 unsigned int supporto = vects[latoMax].Vertices1D[i];
                 vects[latoMax].Vertices1D[i] = vects[latoMax].Vertices1D[i+1];
                 vects[latoMax].Vertices1D[i+1] = supporto;

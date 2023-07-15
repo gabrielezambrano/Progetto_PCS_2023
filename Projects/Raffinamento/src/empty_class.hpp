@@ -32,7 +32,7 @@ namespace Project {
             unsigned int marker1D;
             unsigned int Id1D;
             vector<unsigned int> Vertices1D;
-            Cell1D(unsigned int id, unsigned int marker, vector<unsigned int> vertices);
+            Cell1D(unsigned int id, unsigned int marker, vector<unsigned int>& vertices);
             double LengthEdge(vector<Project::Cell0D>& vectp);
  };
 

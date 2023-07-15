@@ -30,14 +30,14 @@ Cell0D::Cell0D(unsigned int id, unsigned int marker, Vector2d coord)
 
 
 
-Cell1D::Cell1D(unsigned int id,unsigned int marker,vector<unsigned int> vertices)
+Cell1D::Cell1D(unsigned int id,unsigned int marker,vector<unsigned int>& vertices)
     {
     unsigned int Id1d = id;
     unsigned int marker1D = marker;
     vector<unsigned int> Vertices1d = vertices;
     };
 
-Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned int, 3> Edges)
+Cell2D::Cell2D(unsigned int& id,array<unsigned int, 3>& Vertices, array<unsigned int, 3>& Edges)
     {
     unsigned int Id2D = id;
     array<unsigned int, 3> Vertices2D = Vertices;
@@ -50,7 +50,7 @@ Cell2D::Cell2D(unsigned int id,array<unsigned int, 3> Vertices, array<unsigned i
 
 
 
-double Project::Cell1D::LengthEdge(){
+double Project::Cell1D::LengthEdge(vector<Project::Cell0D>& vectp){
     Vector2d coordOrigin = mesh.vectp[this->Vertices1D[0]].Coord;
     Vector2d coordEnd= mesh.vectp[this->Vertices1D[1]].Coord;
     //double len = (coordEnd-coordOrigin).norm();
@@ -58,7 +58,7 @@ double Project::Cell1D::LengthEdge(){
     return len;
     }
 
-unsigned int Project::Cell2D::maxedge(){ 
+unsigned int Project::Cell2D::maxedge(vector<Project::Cell0D>& vectp,vector<Project::Cell1D>& vects){ 
     unsigned int indmax = 0;
     double max = mesh.vects[this->Edges[0]].LengthEdge();
     for (unsigned int i = 1; i<3; i++){
@@ -71,7 +71,7 @@ unsigned int Project::Cell2D::maxedge(){
 
 }
 
-double Project::Cell2D::Area(){
+double Project::Cell2D::Area(vector<Project::Cell0D>& vectp){
              //Formula dell'area di Gauss
              double A_12 = (mesh.vectp[this->Vertices2D[0]].Coord[0]*mesh.vectp[this->Vertices2D[1]].Coord[1]) - (mesh.vectp[this->Vertices2D[0]].Coord[1]*mesh.vectp[this->Vertices2D[1]].Coord[0]);
              double A_23 = (mesh.vectp[this->Vertices2D[1]].Coord[0]*mesh.vectp[this->Vertices2D[2]].Coord[1]) - (mesh.vectp[this->Vertices2D[1]].Coord[1]*mesh.vectp[this->Vertices2D[2]].Coord[0]);

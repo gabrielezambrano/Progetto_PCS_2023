@@ -529,13 +529,13 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         //                            origin latoMax = origin latotagliatovecchio (caso 2)
 
         for (unsigned int i = 0; i <2 ; i++) {
-            if (vects[latoMax].Vertices1D[i] == vects[idLatoTagliatoVecchio].Vertices1D[0] && 1==1){
+            if (vects[latoMax].Vertices1D[i] == vects[idLatoTagliatoVecchio].Vertices1D[0] && i==1){
                 unsigned int supporto = vects[latoMax].Vertices1D[i];
                 vects[latoMax].Vertices1D[i] = vects[latoMax].Vertices1D[i-1];
                 vects[latoMax].Vertices1D[i-1] = supporto;
 
             }
-            else if (vects[latoMax].Vertices1D[i] == vects[idLatoTagliatoNuovo].Vertices1D[1] && 1==0) {
+            else if (vects[latoMax].Vertices1D[i] == vects[idLatoTagliatoNuovo].Vertices1D[1] && i==0) {
                 unsigned int supporto = vects[latoMax].Vertices1D[i];
                 vects[latoMax].Vertices1D[i] = vects[latoMax].Vertices1D[i+1];
                 vects[latoMax].Vertices1D[i+1] = supporto;

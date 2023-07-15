@@ -33,7 +33,7 @@ namespace Project {
             unsigned int Id1D;
             vector<unsigned int> Vertices1D;
             Cell1D(unsigned int id, unsigned int marker, vector<unsigned int> vertices);
-            double LengthEdge();
+            double LengthEdge(vector<Project::Cell0D>& vectp);
  };
 
 
@@ -43,9 +43,9 @@ namespace Project {
             unsigned int Id2D;
             array<unsigned int, 3> Vertices2D;
             array<unsigned int, 3> Edges;
-            Cell2D(unsigned int id, array<unsigned int, 3> Vertices2D, array<unsigned int, 3> Edges);
-            unsigned int maxedge();
-            double Area();
+            Cell2D(unsigned int& id, array<unsigned int, 3>& Vertices2D, array<unsigned int, 3>& Edges);
+            unsigned int maxedge(vector<Project::Cell0D>& vectp,vector<Project::Cell1D>& vects);
+            double Area(vector<Project::Cell0D>& vectp);
         };
  }
     bool ExportCell0Ds(TriangularMesh& mesh);

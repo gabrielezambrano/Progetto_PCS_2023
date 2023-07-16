@@ -652,7 +652,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             }
         }
 
-        // lati effettivi nuovo propa
+        // lati effettivi nuovo propa, caso in cui il lato max si trova a sinistra
         if (vects[latoMax].Vertices1D[0] == vects[idLatoTagliatoVecchio].Vertices1D[0]) {
             for (unsigned int i=0; i < 3; i++) {
                 if (latiTriNuovoPropa[i] != latoMax && latiTriNuovoPropa[i] != idLatoTagliatoVecchio){
@@ -660,6 +660,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 }
             }
         }
+            // caso in cui il lato max si trovi a destra
         else if (vects[latoMax].Vertices1D[1] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
             for (unsigned int i=0; i < 3; i++) {
                 if (latiTriNuovoPropa[i] == latoMax){

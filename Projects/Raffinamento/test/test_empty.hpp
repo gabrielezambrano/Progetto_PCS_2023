@@ -225,7 +225,7 @@ TEST(TestRefinment, TestBisectEPropagation)
     Vector2d CoordT4 = {0, 4};
     Vector2d CoordT5 = {1, 1};
 
-    // triangolo Riccardo
+    // triangolo
   
     Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1), vertT2 = Cell0D(idVerT2, markerVerT2, CoordT2), vertT3 = Cell0D(idVerT3, markerVerT3, CoordT3), vertT4 = Cell0D(idVerT4, markerVerT4, CoordT4), vertT5 = Cell0D(idVerT5, markerVerT5, CoordT5);
     vector<Project::Cell0D> vectpT = {vertT1, vertT2, vertT3, vertT4, vertT5};

@@ -9,9 +9,7 @@ int main()
     vector<Project::Cell0D> vectp;
     unsigned int numbercell1D;
     vector<Project::Cell1D> vects;
-    vector<double> LengthEdges;
     unsigned int numbercell2D;
-    std::vector<vector<unsigned int>> LenghtMax;
     vector<Project::Cell2D> vectt;
 
     Project::TriangularMesh mesh = Project::TriangularMesh();
